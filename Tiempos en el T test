@@ -1,0 +1,22 @@
+library(ggplot2)
+library(readr)
+library(dplyr)
+
+# Cargar los datos
+T_testAgility <- read_csv("Escritorio/T-testAgility.csv")
+
+# Crear una columna de identificador único combinando Nombre y Apellido
+T_testAgility_labeled <- T_testAgility %>%
+  mutate(etiqueta = paste(Nombre, Apellido))
+
+# Generar el gráfico de barras con los valores ordenados de mayor a menor
+ggplot(T_testAgility_labeled, aes(x = reorder(etiqueta, -`Tiempo en s`), y = `Tiempo en s`)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +
+  geom_text(aes(label = `Tiempo en s`), vjust = -0.5, size = 3.5) +
+  labs(title = "Tiempos Individuales de la Prueba de Agilidad U15 Trasandino basquet",
+       x = "Sujeto",
+       y = "Tiempo en segundos") +
+  scale_y_continuous(breaks = seq(0, 15, by = 0.5),
+                     limits = c(0, 15)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
